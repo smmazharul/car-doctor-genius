@@ -14,7 +14,7 @@ const Service = ({service}) => {
 
           <div className="card-actions flex justify-between items-center w-full">
             <p className='text-error font-bold'>price: ${service.price}</p>
-            <Link><FaArrowRight className='text-error font-bold'/></Link>
+            <Link to={`/checkout/${service._id}`}><FaArrowRight className='text-error font-bold'/></Link>
           </div>
         </div>
       </div>
