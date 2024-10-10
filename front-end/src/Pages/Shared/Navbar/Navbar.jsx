@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../../../assets/logo.svg'
+import { AuthContext } from '../../../Providers/AuthProvider';
+import { toast } from 'react-toastify';
 const Navbar = () => {
+  const { user,logOut } = useContext(AuthContext)
+  const userLogOut = () => {
+    logOut()
+      .then(() => {
+        toast.success("Successfully LogOut")
+      })
+    .catch(err=>console.log(err))
+  }
+
     const links = (
       <>
         <li>
@@ -19,6 +30,14 @@ const Navbar = () => {
         <li>
           <Link to='/contact'>Contact</Link>
         </li>
+        {
+          user?.email? <li>
+          <button onClick={userLogOut}>LogOut</button>
+        </li>:<li>
+          <Link to='/login'>Login</Link>
+        </li>
+        
+       }
       </>
     );
 

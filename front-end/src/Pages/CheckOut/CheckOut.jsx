@@ -3,10 +3,11 @@ import { useLoaderData } from "react-router-dom";
 import Facility from "./Facility";
 import checkoutImgae from "../../assets/images/checkout/checkout.png";
 import { AuthContext } from "../../Providers/AuthProvider";
+import { toast } from "react-toastify";
 const CheckOut = () => {
     const {user}=useContext(AuthContext)
   const service = useLoaderData();
-    const { _id,title, description, facility, price } = service;
+    const { _id,title, description, facility, price,img } = service;
     
 
     const handleCheckOut = e => {
@@ -22,7 +23,9 @@ const CheckOut = () => {
             email,
             date,
             phone,
-            service: _id,
+            img,
+            service:title,
+            service_id: _id,
             price:price
         }
         console.log(order)
@@ -34,7 +37,11 @@ const CheckOut = () => {
             },
             body:JSON.stringify(order)
         }).then(res => res.json())
-        .then(data=>console.log(data))
+            .then(data => {
+                if (data.insertedId) {
+                toast.success("Checkout Successfully")
+            }
+        })
 
 
 }
