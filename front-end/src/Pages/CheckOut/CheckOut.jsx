@@ -28,7 +28,7 @@ const CheckOut = () => {
             service_id: _id,
             price:price
         }
-        console.log(order)
+       
         
         fetch(`http://localhost:5000/bookings`, {
             method: "POST",
