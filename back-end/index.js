@@ -37,11 +37,32 @@ const client = new MongoClient(uri, {
 
 
 // middlewares
-// const logger = async (req, res, next) => {
-//     console.log('called:', req.host, req.originalUrl)
-//     next();
-// }
+const logger = async (req, res, next) => {
+    console.log('called:', req.host, req.originalUrl)
+    next();
+}
 
+
+const verifyToken = async (req, res, next) => {
+  const token = req.cookies?.token;
+  console.log('value of token in middleware:', token)
+  if (!token) {
+  return res.status(401).send({message: 'Not Authorize, no token'})
+  }
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+    // error
+    if (err) {
+      console.log(err)
+      return res.status(401).send({message: 'UnAuthorized'})
+    }
+    
+    // if token is valid then it would be decoded 
+    console.log('value in then token', decoded)
+    req.user=decoded
+next();
+  })
+  
+}
 
 async function run() {
   try {
@@ -53,7 +74,7 @@ async function run() {
 
     // auth related Api
 
-   app.post("/jwt", async (req, res) => {
+   app.post("/jwt", logger, async (req, res) => {
      const user = req.body;
      console.log(user);
 
@@ -86,13 +107,13 @@ async function run() {
     });
 
     // bookings
-    app.get("/bookings", async (req, res) => {
+    app.get("/bookings", logger,verifyToken, async (req, res) => {
        console.log(req.query.email);
-       // console.log('ttttt token', req.cookies.token)
-       console.log("user in the valid token", req.cookies.token);
-      //  if (req.query.email !== req.user.email) {
-      //    return res.status(403).send({ message: "forbidden access" });
-      //  }
+       console.log('ttttt token', req.cookies.token)
+       console.log("user in the valid token", req.user);
+       if (req.query.email !== req.user.email) {
+         return res.status(403).send({ message: "forbidden access" });
+       }
 
       let query = {};
       if (req.query?.email) {
