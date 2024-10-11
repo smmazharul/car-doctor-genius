@@ -16,28 +16,34 @@ const Navbar = () => {
     const links = (
       <>
         <li>
-          <Link to='/'>Home</Link>
+          <Link to="/">Home</Link>
         </li>
         <li>
-          <Link to='/about'>About</Link>
+          <Link to="/about">About</Link>
         </li>
         <li>
-          <Link to='/services'>Services</Link>
+          <Link to="/services">Services</Link>
         </li>
         <li>
-          <Link to='/blogs'>Blogs</Link>
+          <Link to="/blogs">Blogs</Link>
         </li>
         <li>
-          <Link to='/contact'>Contact</Link>
+          <Link to="/contact">Contact</Link>
         </li>
-        {
-          user?.email? <li>
-          <button onClick={userLogOut}>LogOut</button>
-        </li>:<li>
-          <Link to='/login'>Login</Link>
-        </li>
-        
-       }
+        {user?.email ? (
+          <>
+            <li>
+              <Link to="/bookings">My Bookings</Link>
+            </li>
+            <li>
+              <button onClick={userLogOut}>LogOut</button>
+            </li>
+          </>
+        ) : (
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
+        )}
       </>
     );
 
