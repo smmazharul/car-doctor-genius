@@ -8,12 +8,12 @@ const Bookings = () => {
   const [bookings, setBookings] = useState([]);
 
   // const url = `http://localhost:5000/bookings?email=${user.email}`;
+  const url = `http://localhost:5000/bookings?email=${user?.email}`;
   useEffect(() => {
-    const url = `http://localhost:5000/bookings?email=${user?.email}`;
     fetch(url)
       .then((res) => res.json())
       .then((data) => setBookings(data));
-  }, []);
+  }, [url]);
 
   const handleDeleteBooking = (id) => {
     const proceed = confirm("Are you sure you want to delete ?");
@@ -32,7 +32,27 @@ const Bookings = () => {
         })
         .catch((error) => console.error("Error:", error));
     }
-  };
+    };
+    
+    const handleConfirmBooking = id => {
+         fetch(`http://localhost:5000/bookings/${id}`, {
+             method: "PATCH",
+             headers: {
+                 'content-type':'application/json'
+             },
+             body:JSON.stringify({status:'confirm'})
+         })
+            .then(res => res.json())
+             .then(data => {
+                 if (data.modifiedCount > 0) {
+                     const remaining = bookings.filter(booking => booking._id !== id)
+                     const updated = bookings.find(booking => booking._id === id)
+                     updated.status = 'confirm'
+                     const newBooking = [updated, ...remaining]
+                     setBookings(newBooking)
+                 } 
+        })
+    }
 
   return (
     <div>
@@ -56,6 +76,7 @@ const Bookings = () => {
                 key={booking._id}
                 booking={booking}
                 handleDeleteBooking={handleDeleteBooking}
+                handleConfirmBooking={handleConfirmBooking}
               ></Booking>
             ))}
           </tbody>

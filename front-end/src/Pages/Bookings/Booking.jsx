@@ -2,7 +2,7 @@ import React from 'react';
 
 
 const Booking = ({ booking, handleConfirmBooking, handleDeleteBooking }) => {
-  const { _id, service, price, customerName, email, date } = booking;
+  const { _id, service, price, customerName, email, date,status } = booking;
 
   return (
     <tr>
@@ -47,9 +47,9 @@ const Booking = ({ booking, handleConfirmBooking, handleDeleteBooking }) => {
       </td>
       <td className="font-bold">{date}</td>
       <th>
-        <button onClick={handleConfirmBooking} className="btn btn-ghost btn-xs">
-          Confirm
-        </button>
+       {status==='confirm'? <span className='font-bold text-green-600'>Confirmed</span> : <button onClick={()=>handleConfirmBooking(_id)} className="btn btn-ghost btn-xs">
+          Please Confirm
+        </button>}
       </th>
     </tr>
   );
