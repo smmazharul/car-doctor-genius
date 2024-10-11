@@ -1,53 +1,68 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../../Providers/AuthProvider';
-import Booking from './Booking';
-
+import React, { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../Providers/AuthProvider";
+import Booking from "./Booking";
+import { toast } from "react-toastify";
 const Bookings = () => {
-    const { user } = useContext(AuthContext);
-    
-    const [bookings, setBookings] = useState([])
-    
+  const { user } = useContext(AuthContext);
 
-    // const url = `http://localhost:5000/bookings?email=${user.email}`;
-    useEffect(() => {
+  const [bookings, setBookings] = useState([]);
 
-      
-           const url = `http://localhost:5000/bookings?email=${user?.email}`;
-           fetch(url)
-             .then((res) => res.json())
-             .then((data) => setBookings(data));
-         
-     
-    }, [])
+  // const url = `http://localhost:5000/bookings?email=${user.email}`;
+  useEffect(() => {
+    const url = `http://localhost:5000/bookings?email=${user?.email}`;
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => setBookings(data));
+  }, []);
 
- 
-    return (
-      <div>
-        <h2>My Bookings {bookings.length} </h2>
-
-        <div className="overflow-x-auto">
-          <table className="table">
-            {/* head */}
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Job</th>
-                <th>Favorite Color</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-                        {
-                            bookings.map(booking=><Booking key={booking._id} booking={booking}></Booking>)
-              }
+  const handleDeleteBooking = (id) => {
+    const proceed = confirm("Are you sure you want to delete ?");
+    if (proceed) {
+      fetch(`http://localhost:5000/bookings/${id}`, {
+        method: "DELETE",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.deletedCount > 0) {
+              toast.success("Delete Successfully");
+              const remainingBookings = bookings.filter( (booking) => booking._id !== id);
+              setBookings(remainingBookings);
+          }
           
-            
-            </tbody>
-         
-          </table>
-        </div>
+        })
+        .catch((error) => console.error("Error:", error));
+    }
+  };
+
+  return (
+    <div>
+      <h2>My Bookings {bookings.length} </h2>
+
+      <div className="overflow-x-auto">
+        <table className="table">
+          {/* head */}
+          <thead>
+            <tr>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {bookings.map((booking) => (
+              <Booking
+                key={booking._id}
+                booking={booking}
+                handleDeleteBooking={handleDeleteBooking}
+              ></Booking>
+            ))}
+          </tbody>
+        </table>
       </div>
-    );
+    </div>
+  );
 };
 
 export default Bookings;
