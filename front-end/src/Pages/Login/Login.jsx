@@ -22,19 +22,19 @@ const Login = () => {
           toast.success("Successfully logged in!");
           // Redirect or perform actions after successful login
 
-        
           // get access token
           const user = { email };
           axios
-            .post("http://localhost:5000/jwt", user, { withCredentials: true })
+            .post("https://car-doctor-back-end.onrender.com/jwt", user, {
+              withCredentials: true,
+            })
             .then((res) => {
-              console.log(res.data);
               if (res.data.success) {
                 navigate(location?.state ? location?.state : "/");
               }
             });
 
-          // 
+          //
         } else {
           toast.error("Please verify your email before logging in.");
         }

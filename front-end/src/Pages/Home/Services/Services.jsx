@@ -1,37 +1,38 @@
-import React, { useEffect, useState } from 'react';
-import Service from './Service';
-import useServices from '../../../Hooks/UseServices';
+import React, { useEffect, useState } from "react";
+import Service from "./Service";
+// import useServices from "../../../Hooks/UseServices";
 
 const Services = () => {
-  const services = useServices()
+  // const services = useServices();
+ 
 
-    // const [services, setServices] = useState([]);
+  const [services, setServices] = useState([]);
 
-    // useEffect(() => {
-    //     fetch("http://localhost:5000/services")
-    //       .then((res) => res.json())
-    //       .then((data) => setServices(data));
-        
-    // },[])
-    return (
-      <div className="mt-36">
-        <div className="text-center  my-6">
-          <h2 className="font-bold text-error">Services</h2>
-          <h1 className="text-4xl font-bold">Our Service Area</h1>
-          <p>
-            the majority have suffered alteration in some form, by injected
-            humour, or randomised <br /> words which don't look even slightly
-            believable.
-          </p>
-        </div>
+  useEffect(() => {
+      fetch("https://car-doctor-back-end.onrender.com/services")
+        .then((res) => res.json())
+        .then((data) => setServices(data));
 
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-8'>
-          {services.map((service) => (
-            <Service key={service._id} service={service}></Service>
-          ))}
-        </div>
+  },[])
+  return (
+    <div className="mt-36">
+      <div className="text-center  my-6">
+        <h2 className="font-bold text-error">Services</h2>
+        <h1 className="text-4xl font-bold">Our Service Area</h1>
+        <p>
+          the majority have suffered alteration in some form, by injected
+          humour, or randomised <br /> words which don't look even slightly
+          believable.
+        </p>
       </div>
-    );
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-8">
+        {services.map((service) => (
+          <Service key={service._id} service={service}></Service>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default Services;

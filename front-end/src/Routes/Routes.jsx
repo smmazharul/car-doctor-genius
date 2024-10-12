@@ -7,7 +7,6 @@ import CheckOut from "../Pages/CheckOut/CheckOut";
 import Bookings from "../Pages/Bookings/Bookings";
 import PrivateRoutes from "./PrivateRoutes";
 
-
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -33,7 +32,9 @@ export const router = createBrowserRouter([
           </PrivateRoutes>
         ),
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/services/${params.id}`),
+          fetch(
+            `https://car-doctor-back-end.onrender.com/services/${params.id}`
+          ),
       },
 
       {

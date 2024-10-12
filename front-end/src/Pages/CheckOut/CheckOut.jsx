@@ -5,46 +5,43 @@ import checkoutImgae from "../../assets/images/checkout/checkout.png";
 import { AuthContext } from "../../Providers/AuthProvider";
 import { toast } from "react-toastify";
 const CheckOut = () => {
-    const {user}=useContext(AuthContext)
+  const { user } = useContext(AuthContext);
   const service = useLoaderData();
-    const { _id,title, description, facility, price,img } = service;
-    
+  const { _id, title, description, facility, price, img } = service;
 
-    const handleCheckOut = e => {
-        e.preventDefault()
-        const form = e.target;
-        const name = form.name.value;
-        const email = user?.email;
-        const phone = form.phone.value;
-        const date = form.date.value;
+  const handleCheckOut = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const name = form.name.value;
+    const email = user?.email;
+    const phone = form.phone.value;
+    const date = form.date.value;
 
-        const order = {
-            customerName: name,
-            email,
-            date,
-            phone,
-            img,
-            service:title,
-            service_id: _id,
-            price:price
+    const order = {
+      customerName: name,
+      email,
+      date,
+      phone,
+      img,
+      service: title,
+      service_id: _id,
+      price: price,
+    };
+
+    fetch(`https://car-doctor-back-end.onrender.com/bookings`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(order),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.insertedId) {
+          toast.success("Checkout Successfully");
         }
-       
-        
-        fetch(`http://localhost:5000/bookings`, {
-            method: "POST",
-            headers: {
-                'content-type':'application/json'
-            },
-            body:JSON.stringify(order)
-        }).then(res => res.json())
-            .then(data => {
-                if (data.insertedId) {
-                toast.success("Checkout Successfully")
-            }
-        })
-
-
-}
+      });
+  };
 
   return (
     <div>
@@ -72,8 +69,8 @@ const CheckOut = () => {
               ))}
             </div>
           </div>
-                  <div className="card bg-base-100 w-full max-w-md shrink-0 shadow-md">
-                      <p className="text-center my-5 text-xl font-bold">Book: { title}</p>
+          <div className="card bg-base-100 w-full max-w-md shrink-0 shadow-md">
+            <p className="text-center my-5 text-xl font-bold">Book: {title}</p>
             <form className="card-body" onSubmit={handleCheckOut}>
               <div className="form-control ">
                 <input
@@ -90,8 +87,8 @@ const CheckOut = () => {
                   type="email"
                   placeholder="email"
                   name="email"
-                                  defaultValue={user?.email}
-                                  readOnly
+                  defaultValue={user?.email}
+                  readOnly
                   className="input input-bordered"
                   required
                 />
