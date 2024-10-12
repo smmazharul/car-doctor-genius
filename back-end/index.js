@@ -79,14 +79,14 @@ async function run() {
      console.log(user);
 
      const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-       expiresIn: "1h",
+       expiresIn: "30d",
      });
 
      res
        .cookie("token", token, {
          httpOnly: true,
          secure: false,
-         sameSite:"none"
+        //  sameSite:"none"
        })
        .send({ success: true });
    });
@@ -108,9 +108,9 @@ async function run() {
 
     // bookings
     app.get("/bookings", logger,verifyToken, async (req, res) => {
-       console.log(req.query.email);
-       console.log('ttttt token', req.cookies.token)
-       console.log("user in the valid token", req.user);
+      //  console.log(req.query.email);
+      //  console.log('ttttt token', req.cookies.token)
+      //  console.log("user in the valid token", req.user);
        if (req.query.email !== req.user.email) {
          return res.status(403).send({ message: "forbidden access" });
        }

@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import Service from './Service';
+import useServices from '../../../Hooks/UseServices';
 
 const Services = () => {
+  const services = useServices()
 
-    const [services, setServices] = useState([]);
+    // const [services, setServices] = useState([]);
 
-    useEffect(() => {
-        fetch("http://localhost:5000/services")
-          .then((res) => res.json())
-          .then((data) => setServices(data));
+    // useEffect(() => {
+    //     fetch("http://localhost:5000/services")
+    //       .then((res) => res.json())
+    //       .then((data) => setServices(data));
         
-    },[])
+    // },[])
     return (
       <div className="mt-36">
         <div className="text-center  my-6">
